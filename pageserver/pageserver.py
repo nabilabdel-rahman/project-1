@@ -98,8 +98,10 @@ def respond(sock, docroot):
     if len(parts) > 1 and parts[0] == "GET":
         if '..' in parts[1] or '~' in parts[1]:
             transmit(STATUS_FORBIDDEN, sock)
+            transmit("HTTP/1.0 403 Forbidden\n\nContains illegal character(s)", sock)
         elif not os.path.exists(file_path):
             transmit(STATUS_NOT_FOUND, sock)
+            transmit("HTTP/1.0 404 Not Found\n\nFile cannot be found", sock)
         elif os.path.exists(file_path) and not parts[1] == "/":
             transmit(STATUS_OK, sock)
             with open(file, "r", encoding="utf-8") as html_file:
